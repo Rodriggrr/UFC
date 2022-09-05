@@ -1,44 +1,43 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include "cout.hpp"
 using namespace std;
 
-
-vector<int> unicos(vector<int> x)
+bool exists(std::vector<int> vet, int value)
 {
-    vector<int> y;
-    for(int i = 0; i < (int)x.size(); i++){
-        bool repeat = false;
-        for(int j = i + 1; j < (int)x.size(); j++){
-            if(x[i] == x[j])
-                repeat = true;
-        }
-        if(!repeat)
-            y.push_back(x[i]);
-    }
-    return y;
+    if(find(vet.begin(), vet.end(), value) != vet.end())
+        return true;
+    return false;
 }
 
-vector<int> repetidos(vector<int> x)
+std::vector<int> unique(std::vector<int> x)
 {
-    vector<int> y;
-    for(int i = 0; i < (int)x.size(); i++){
-        bool repeat = false;
-        for(int j = 0; j < (int)x.size(); j++){
-            if(x[i] == x[j] && j != i)
-                repeat = true;
-        }
-        if(repeat)
-            y.push_back(x[i]);
-    }
-    return y;
+    std::vector<int> unicos, repetidos;
+    for (auto i = 0; i < x.size(); i++)
+        if (!exists(unicos, x[i]))
+            unicos.push_back(x[i]);
+        else
+            repetidos.push_back(x[i]);
+    return unicos;
+}
+
+std::vector<int> repeated(std::vector<int> x)
+{
+    std::vector<int> unicos, repetidos;
+    for (auto i = 0; i < x.size(); i++)
+        if (!exists(unicos, x[i]))
+            unicos.push_back(x[i]);
+        else
+            repetidos.push_back(x[i]);
+    return repetidos;
 }
 
 int main()
 {
     vector<int> x {1, 2, 4, 4, 6, 3, 2, 4, 7}, y, z;
-    y = repetidos(x);
-    z = unicos(x);
+    y = repeated(x);
+    z = unique(x);
 
     cout << x << endl << y << endl << z << endl;
 }
