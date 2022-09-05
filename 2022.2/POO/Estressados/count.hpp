@@ -88,13 +88,3 @@ string sex_battle(vector<int> x)
         return "women";
     return "men";
 }
-
-int main()
-{
-    cout << count({2, 2, 2, 2, 2}, 2) << " - count function\n";
-    cout << average({7, 7, 7}) << " - average fnc\n";
-    cout << half_compares({2, 2, 2, 3}) << " - half compare fnc\n";
-    cout << more_men_or_women({-1, -45, -3, 5, 3, 2, 5}) << " - more men or women fnc\n";
-    cout << sex_battle({-1, -2, -3, -4, 1, 2 ,3 ,4});
-    
-}

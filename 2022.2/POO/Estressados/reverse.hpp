@@ -1,8 +1,3 @@
-#include <iostream>
-#include <vector>
-#include "cout.hpp"
-using namespace std;
-
 vector<int> reverse(vector<int> x)
 {
     vector<int> y;
@@ -17,15 +12,4 @@ void reverse_inplace(vector<int> &x)
     for(int i = (int)x.size() - 1; i >= 0; i--)
         y.push_back(x[i]);
     x = y;
-}
-
-int main()
-{
-    vector<int> x {1, 2, 3, 4, 5}, y;
-    y = reverse(x);
-    cout << x << endl;
-    reverse_inplace(x);
-    cout << x << endl << y;
-
-
 }

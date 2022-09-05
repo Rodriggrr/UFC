@@ -1,9 +1,8 @@
-#include <vector>
-using std::vector;
+#include <algorithm>
 #include <iostream>
-using std::ostream;
+#include <vector>
+#include <ctime>
 #include <map>
-using std::map;
 
 template<typename T>
 ostream& operator<< (ostream& out, const vector<T>& v) {

@@ -1,7 +1,3 @@
-#include <iostream>
-#include <vector>
-using namespace std;
-
 bool in(vector<int> x, int value)
 {
     for(auto a : x)      
@@ -44,9 +40,4 @@ int fin_min_if(vector<int> x)
         if(x[i] > 0 && (x[pos] > x[i] || pos == -1))
             pos = i;
     return pos;
-}
-
-int main()
-{
-    cout << fin_min_if({2, 3, 4, 3, 1, 2, 2});
 }

@@ -1,15 +1,3 @@
-#include <windows.h>
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <ctime>
-#include <map>
-
-#include "cout.hpp"
-using namespace std;
-
-vector<int> fila {1, -2, 3, 5, 5, 5, 5, 3, 2, 5, 7};
-
 vector<int> acompanhados(const vector<int>& vet)
 {
     auto posFix = [=] (int i) {
@@ -72,7 +60,7 @@ map<int, int> times(vector<int> vet)
 int casais(vector<int> vet)
 {
     int cas{};
-    sort(vet.begin(), vet.end(), [](int a, int b){return abs(a) < abs(b);});
+    std::sort(vet.begin(), vet.end(), [](int a, int b){return abs(a) < abs(b);});
     for(auto i = 0; i < vet.size(); i++)
     {
         if(abs(vet[i]) == abs(vet[i+1])){
@@ -123,19 +111,5 @@ void embaralhar(vector<int>& vet)
         int j = rand() % vet.size();
         swap(vet[i], vet[j]);
     }
-}
-
-int main()
-{
-    embaralhar(fila);
-    cout << fila << "------------------- < fila\n";
-    cout << Map(fila) << "-------------------- < fnc map\n";
-    cout << sozinhos(fila) << "-------------------- < fnc sozinhos\n";
-    cout << acompanhados(fila) << "------------------ < fnc acompanhados\n";
-    cout << times(fila) << "------------------- < fnc times\n";
-    cout << casais(fila) << "------------------- < fnc casais\n";
-    cout << remover_todos({0, 2}, fila) << "----------------- < fnc remover_todos\n";
-    cout << dance(fila) << "----------------- < fnc dance\n";
-    cout << sortear(fila) << "----------------- < fnc sortear\n";
 }
 
