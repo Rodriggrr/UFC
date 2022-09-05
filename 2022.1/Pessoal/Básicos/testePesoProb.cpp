@@ -12,7 +12,4 @@ int main()
         cout << "Rodrigo\n";
     else if(random > prob)
         cout << "Fabiano\n";
-    
-    
-
 }
