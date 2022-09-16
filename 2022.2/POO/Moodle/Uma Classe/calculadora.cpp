@@ -2,7 +2,7 @@
 1) Fiz o struct "calculadora", para armazenar todas as funções necessárias, e seus devidos erros
 e operações. Fiz sozinho.
 
-2) O código, porser muito parecido com o anterior, teve uma certa facilidade. Tive mais problema em
+2) O código, por ser muito parecido com o anterior, teve uma certa facilidade. Tive mais problema em
 imprimir um float usando a conversão "(float)". Tive que criar duas variáveis de tipo float auxiliares para
 contornar o problema.
 
