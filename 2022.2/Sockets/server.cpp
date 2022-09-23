@@ -29,9 +29,11 @@
 #include <ws2tcpip.h>
 #include <winsock2.h>
 
+#include <ctime>
 #include <vector>
 #include <exception>
 #include <sstream>
+#include <iomanip>
 #include <utility>
 #include <iostream>
 #include <algorithm>
@@ -57,6 +59,22 @@ bool clientConnected{false};
 
 // A pointer to the client socket.
 struct sockaddr_in *client;
+
+// A pointer to serverTime
+int* serverTime_ptr;
+void server_time(int* Time)
+{
+    int minute, hour, second;
+    int serverTime = time(NULL)- *Time;
+    hour = serverTime / 3600;
+    serverTime = serverTime % 3600;
+    minute = serverTime / 60;
+    second = serverTime % 60;
+    std::cout << "Server time: "
+              << std::setw(2) << std::setfill('0')  << hour << ":"
+              << std::setw(2) << std::setfill('0')  << minute << ":" 
+              << std::setw(2) << std::setfill('0')  << second << std::endl;
+}
 
 // The main function for the thread, it will write the data to the console and perform the necessary operations.
 int threadProc(void *server)
@@ -90,6 +108,7 @@ int threadProc(void *server)
             std::cout << "clear    - clear console" << std::endl;
             std::cout << "exit     - close server and exit program" << std::endl;
             std::cout << "help     - show this message" << std::endl;
+            std::cout << "time     - show server time" << std::endl;
             std::cout << "> ";
         }
         else if (consoleInput == "clientip")
@@ -104,6 +123,11 @@ int threadProc(void *server)
                 std::cout << "No client connected."
                           << "\n> ";
         }
+        else if (consoleInput == "time")
+        {
+            server_time(serverTime_ptr);
+            std::cout << "> ";
+        }
         else
         {
             std::cout << "Unknown command. Type \"help\" for a list of commands.\n> ";
@@ -111,8 +135,12 @@ int threadProc(void *server)
     }
 }
 
+
+
 int main()
 {
+    int serverTime = time(NULL);
+    serverTime_ptr = &serverTime;
     // Flush stdin and stdout to assure that the console is clean.
     fflush(stdin);
     fflush(stdout);
