@@ -18,27 +18,8 @@
 | *                                                                                             |
 ************************************************************************************************/
 
-#undef UNICODE
-#define _WIN32_WINNT 0x501
-#define WIN32_LEAN_AND_MEAN
-
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <ws2tcpip.h>
-#include <winsock2.h>
-
-#include <ctime>
-#include <vector>
-#include <exception>
-#include <sstream>
-#include <iomanip>
-#include <utility>
-#include <iostream>
-#include <algorithm>
-
-
+#include "ServerConsole.hpp"
+void chat(void *cl);
 
 int main()
 {
@@ -63,7 +44,7 @@ int main()
     struct sockaddr_in saddr, caddr;
     saddr.sin_family = AF_INET;
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    saddr.sin_port = htons(4002);
+    saddr.sin_port = htons(8922);
 
     int server = socket(AF_INET, SOCK_STREAM, 0);
     std::cout << ((server == -1) ? "Socket creation failed" : "Socket creation success") << std::endl;
@@ -82,7 +63,7 @@ int main()
         std::cout << "Listen success" << std::endl;
 
     //---------------------- Create a thread to handle console input --------------------------
-    if (CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)threadProc, (void *)server, 0, NULL) != NULL)
+    if (thread_HANDLE = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)threadProc, (void *)server, 0, NULL) != NULL)
         std::cout << "Console thread created." << std::endl;
     else
         std::cout << "Console thread creation failed." << std::endl;
@@ -93,50 +74,38 @@ int main()
     //--------------------------------- Accept a client ---------------------------------------
 
     // Client properties.
-    int client, caddr_len = sizeof(caddr);
+    std::vector<int> clients;
+    int cliente, caddr_len = sizeof(caddr);
     int msg_len;
+    int clientCount = 0;
     while (true)
     {
         std::cout << "> ";
-        // Accept a client
-        client = accept(server, (struct sockaddr *)&caddr, &caddr_len);
-        if (client == SOCKET_ERROR)
-        {
-            std::cout << "\b\bServer Closed." << std::endl;
-            break;
-        }
+        cliente = accept(server, (struct sockaddr *)&caddr, &caddr_len);
+        if (cliente == SOCKET_ERROR)
+            std::cout << "Accept failed" << std::endl;
         else
-            std::cout << "\b\b  \nAccept success; Client connected.\n> ";
-
-        // Set the clientConnected flag to true.
-        clientConnected = true;
-        // Global client variable receives the client address, used for the clientip command.
-        ::client = &caddr;
-
-        // Send the message to the client.
-        msg_len = send(client, buffer, sizeof(buffer), 0);
-
-        // Receive and send data.
-        if ((msg_len = recv(client, buffer, sizeof(buffer), 0)) > 0)
         {
-            if(buffer_string(buffer) == "3")
-            {
-                char winMessage[1024] = "Voce acertou!";
-                send(client, winMessage, sizeof(winMessage), 0);
-            }
-            else
-            {
-                char loseMessage[1024] = "Voce errou!";
-                send(client, loseMessage, sizeof(loseMessage), 0);
-            }
+            clients.push_back(cliente);
+            std::cout << "Client Connected!" << std::endl;
+            char buffaux[1024] = "Connected to chat!\n";
+            send(server, buffaux, sizeof(buffaux), 0);
+            clientConnected = true;
+            ::client = &caddr;
         }
 
-        // Close the client socket and set the clientConnected flag to false.
-        fflush(stdout);
-        flushBuffer(buffer);
-        closesocket(client);
-        std::cout << "\b\bClient disconnected" << std::endl;
-        clientConnected = false;
+        if (chatRequest)
+        {
+            for (int i = clientCount; i < clients.size(); i++)
+            {
+                HANDLE threadNum;
+                std::cout << "Client " << i << " connected to chat." << std::endl;
+                std::pair<int, HANDLE> *pair = new std::pair<int, HANDLE>(clients[i], threadNum);
+                threadNum = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)chat, (void *)pair, 0, NULL);
+                clientCount++;
+            }
+            closesocket(cliente);
+        }
     }
 
     // Restart the server if the consoleCode is 1.
@@ -148,4 +117,19 @@ int main()
         main();
     }
     return 0;
+}
+
+void chat(void *cl)
+{
+    char buffer[1024];
+    int msg_len;
+    std::pair<int, HANDLE> threadClient = *(std::pair<int, HANDLE> *)cl;
+    std::cout << "Thread " << threadClient.second << " is running." << std::endl;
+    while (chatRequest)
+    {
+        recv((SOCKET)threadClient.first, buffer, sizeof(buffer), 0);
+        std::cout << "Client: " << buffer_string(buffer) << std::endl;
+    }
+    TerminateThread(threadClient.second, 0);
+    delete (std::pair<int, HANDLE>*)cl;
 }

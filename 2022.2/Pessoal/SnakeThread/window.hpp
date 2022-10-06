@@ -1,12 +1,5 @@
-#include <iostream>
-#include <limits>
-#include <stdexcept>
-using namespace std;
-
 #include <windows.h>
-
-
-
+#include <exception>
 struct console
   {
   console( unsigned width, unsigned height )
@@ -15,7 +8,7 @@ struct console
     COORD      c;
     hConOut = GetStdHandle( STD_OUTPUT_HANDLE );
     if (!GetConsoleScreenBufferInfo( hConOut, &csbi ))
-      throw runtime_error( "You must be attached to a human." );
+      throw std::runtime_error( "You must be attached to a human." );
 
     r.Left   =
     r.Top    = 0;
@@ -46,4 +39,4 @@ struct console
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   };
 
-console con( 40, 20 );
+console con( 80, 40 );
