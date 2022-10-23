@@ -25,7 +25,7 @@ void calculate(float x)
 // lastOp stops from repeating the result if pressing the same operation.
 // first makes the procedures for the first number.
 bool lastOp = false, first = true, cec = false;
-int IDAux;
+int IDauxiliar;
 bool floatNum = false;
 bool noNum = false;
 
@@ -33,7 +33,7 @@ bool noNum = false;
 int do_op(int ID, HWND hWnd)
 {
     if (noNum)
-        IDAux = ID;
+        IDauxiliar = ID;
     if (ID == 36)
     {
         if (first)
@@ -41,9 +41,9 @@ int do_op(int ID, HWND hWnd)
         noNum = true;
     }
 
-    if (first or IDAux == 36)
+    if (first or IDauxiliar == 36)
     {
-        IDAux = ID;
+        IDauxiliar = ID;
     }
     if (ID > 31 and ID < 36)
         noNum = false;
@@ -128,7 +128,7 @@ int do_op(int ID, HWND hWnd)
             first = false;
         }
         else
-            switch (IDAux) // Se não for o primeiro, processa a operação de acordo com o operador.
+            switch (IDauxiliar) // Se não for o primeiro, processa a operação de acordo com o operador.
             {
             case 32:
                 STRING_TO_INT(addNum, totalNum); // Já explicado em cima.
@@ -158,7 +158,7 @@ int do_op(int ID, HWND hWnd)
                 noNum = true; // Impedir que escreva um número ao inves de um operador; debugging.
                 break;
             }
-        IDAux = ID; // operações com atraso para mostrar apenas quando apertado outro operador.
+        IDauxiliar = ID; // operações com atraso para mostrar apenas quando apertado outro operador.
     }
     std::string showNum = std::to_string(num3);
     showNum.resize(showNum.length() - 4); // fazendo o float ter apenas duas casas decimais por mudar o tamanho da string - método perigoso.

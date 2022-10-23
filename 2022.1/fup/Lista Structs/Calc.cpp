@@ -18,13 +18,13 @@ struct aluno
     
 vector<aluno> sort_vector(vector<aluno> vetor)
 {   
-    aluno aux;
+    aluno auxiliar;
     for(int i = 0; i < vetor.size(); i++){
         for(int j = i + 1; j < vetor.size(); j++){
             if(vetor[i].media() < vetor[j].media()){
-                aux = vetor[i];
+                auxiliar = vetor[i];
                 vetor[i] = vetor[j];
-                vetor[j] = aux;
+                vetor[j] = auxiliar;
             }
         }
     }

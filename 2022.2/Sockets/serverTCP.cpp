@@ -40,8 +40,8 @@ int main(){
         puts(buffer);
       
         if(buffer_string(buffer) == "3"){
-            char bufferaux[1024] =  "ACERTOU EM SAFADO! \n";
-            send(cliente, bufferaux, sizeof bufferaux,0);
+            char bufferauxiliar[1024] =  "ACERTOU EM SAFADO! \n";
+            send(cliente, bufferauxiliar, sizeof bufferauxiliar,0);
         }else{
             
             printf("ERROU Y-Y\n");

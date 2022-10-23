@@ -17,9 +17,9 @@ class cactus
         
         void resize_vet()
         {
-            coord aux;
+            coord auxiliar;
             for(int i= 0; i < 18; i++)
-                v.push_back(aux);
+                v.push_back(auxiliar);
         }
 
         void initialize_cactus();

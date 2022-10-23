@@ -26,7 +26,7 @@ int pontos = 1;
 bool fruit = false, perder = false, nRecord = false;
 char choice;
 char matrix[20][20];
-string recordAux, recordAux2;
+string recordauxiliar, recordauxiliar2;
 int record;
 
 void verificar_recorde() {

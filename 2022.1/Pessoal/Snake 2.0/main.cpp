@@ -276,9 +276,9 @@ int menu() {
   //--------------------------------------------------
 
   // Seta acima dos botões, identidade visual.---------
-  char choice = 'a', aux;
+  char choice = 'a', auxiliar;
   while (choice != ' ') {  // apenas sai quando o jogador apertar espaço.
-    aux = choice;
+    auxiliar = choice;
     choice = getch();  // variável armazena o lado que o jogador escolheu.
     if (choice == 'a') {
       cout << "\b ";
@@ -296,10 +296,10 @@ int menu() {
   }
   //--------------------------------------------------
 
-  if (aux == 'd')  // dependendo da escolha, uma ação é realizada, no caso jogar
+  if (auxiliar == 'd')  // dependendo da escolha, uma ação é realizada, no caso jogar
                    // ou sair.
     return 0;
-  else if (aux == 's') {
+  else if (auxiliar == 's') {
     help();
     clrscrn();
     main();

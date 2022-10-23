@@ -2,7 +2,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-#include <aux.hpp>
+#include <auxiliar.hpp>
 
 
 class Pet{
@@ -138,10 +138,10 @@ public:
 
 
 int main() {
-    aux::Chain chain;
-    aux::Param ui;
+    auxiliar::Chain chain;
+    auxiliar::Param ui;
     Pet pet;
-    auto toint = aux::to<int>;
+    auto toint = auxiliar::to<int>;
     chain["show"] = [&]() { std::cout << pet.toString() << '\n'; };
     chain["init"] = [&]() { pet = Pet(toint(ui[1]), toint(ui[2]), toint(ui[3])); };
     chain["play"] = [&]() { pet.play(); };
@@ -149,5 +149,5 @@ int main() {
     chain["clean"] =[&]() { pet.shower(); };
     chain["sleep"] =[&]() { pet.sleep(); };
     
-    aux::execute(chain, ui);
+    auxiliar::execute(chain, ui);
 };

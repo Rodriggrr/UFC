@@ -10,7 +10,7 @@ algo novo, porém exercitei o que já sabia.
 
 #include <iostream>
 #include <sstream>
-#include <aux.hpp>
+#include <auxiliar.hpp>
 
 class Time {
 private:
@@ -77,17 +77,17 @@ public:
 };
 
 int main() {
-    aux::Chain chain;
-    aux::Param ui;
+    auxiliar::Chain chain;
+    auxiliar::Param ui;
     Time time(0, 0, 0);
 
     chain["set"] = [&] () {
-        time.setHour(aux::to<int>(ui[1]));
-        time.setMinute(aux::to<int>(ui[2]));
-        time.setSecond(aux::to<int>(ui[3]));
+        time.setHour(auxiliar::to<int>(ui[1]));
+        time.setMinute(auxiliar::to<int>(ui[2]));
+        time.setSecond(auxiliar::to<int>(ui[3]));
     };
     chain["show"] = [&] () { std::cout << time.str() << std::endl; };
     chain["next"] = [&] () { time.nextSecond(); };
 
-    aux::execute(chain, ui);
+    auxiliar::execute(chain, ui);
 };

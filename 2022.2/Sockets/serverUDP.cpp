@@ -55,13 +55,13 @@ int main()
 
             if (buffer_string(buffer) == "3")
             {
-                char bufferaux[1024] = "Acertou mizerave! ";
-                sendto(servidor, bufferaux, sizeof bufferaux, 0, (struct sockaddr *)&sockcliente, clientetam);
+                char bufferauxiliar[1024] = "Acertou mizerave! ";
+                sendto(servidor, bufferauxiliar, sizeof bufferauxiliar, 0, (struct sockaddr *)&sockcliente, clientetam);
             }
             else
             {
-                char bufferaux[1024] = "Errou mizerave! ";
-                sendto(servidor, bufferaux, sizeof bufferaux, 0, (struct sockaddr *)&sockcliente, clientetam);
+                char bufferauxiliar[1024] = "Errou mizerave! ";
+                sendto(servidor, bufferauxiliar, sizeof bufferauxiliar, 0, (struct sockaddr *)&sockcliente, clientetam);
             }
             puts(buffer);
         }

@@ -88,8 +88,8 @@ int main()
         {
             clients.push_back(cliente);
             std::cout << "Client Connected!" << std::endl;
-            char buffaux[1024] = "Connected to chat!\n";
-            send(server, buffaux, sizeof(buffaux), 0);
+            char buffauxiliar[1024] = "Connected to chat!\n";
+            send(server, buffauxiliar, sizeof(buffauxiliar), 0);
             clientConnected = true;
             ::client = &caddr;
         }

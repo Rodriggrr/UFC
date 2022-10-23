@@ -3,7 +3,7 @@
 e operações. Fiz sozinho.
 
 2) O código, por ser muito parecido com o anterior, teve uma certa facilidade. Tive mais problema em
-imprimir um float usando a conversão "(float)". Tive que criar duas variáveis de tipo float auxiliares para
+imprimir um float usando a conversão "(float)". Tive que criar duas variáveis de tipo float auxiliariliares para
 contornar o problema.
 
 3) Fiz em exatamente 48 minutos.
@@ -68,12 +68,12 @@ void calculadora::div()
 {
     int val1, val2;
     cin >> val1 >> val2;
-    float val1aux = val1, val2aux = val2;
+    float val1auxiliar = val1, val2auxiliar = val2;
     cout << "$div " << val1 << " " << val2 << endl;
     if(val2 == 0)
         cout << "fail: divisao por zero\n";
     else if(bateria >= 1){
-        display = val1aux / val2aux;
+        display = val1auxiliar / val2auxiliar;
     }
     else
         cout << "fail: bateria insuficiente\n";

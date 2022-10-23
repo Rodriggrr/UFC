@@ -11,14 +11,14 @@ como me eram pedidas as funções, já que havia faltado no dia anterior.
 Depois de entender, fiz até que bem rápido.
 
 
-GITHUB: Código não funcional sem o arquivo AUX.CPP, disponível apenas no Moodle2.
+GITHUB: Código não funcional sem o arquivo auxiliar.CPP, disponível apenas no Moodle2.
 Dessa forma, código abaixo utilizado apenas como recordação e para fins de aprendizado.
 */
 
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <aux.hpp>
+#include <auxiliar.hpp>
 
 enum Coin {M10, M25, M50, M100};
 struct CoinDef {
@@ -79,10 +79,10 @@ public:
     }
     
     bool addCoin(Coin coin) {
-        int volAux = volume + getDef(coin).volume;
-        if(volAux < volumeMax && !broken){
+        int volauxiliar = volume + getDef(coin).volume;
+        if(volauxiliar < volumeMax && !broken){
             value += getDef(coin).value;
-            volume = volAux;
+            volume = volauxiliar;
             return true;
         }
         std::cout << ((this->broken) ? "fail: the pig is broken\n" : "fail: the pig is full\n"); 
@@ -90,11 +90,11 @@ public:
     }
 
     bool addItem(Item item) {
-        int volAux = volume + item.getVolume();
-        if(volAux <= volumeMax && !broken)
+        int volauxiliar = volume + item.getVolume();
+        if(volauxiliar <= volumeMax && !broken)
         {
             itens.push_back(item.str());
-            volume = volAux;
+            volume = volauxiliar;
             return true;
         }
         
@@ -110,9 +110,9 @@ public:
 
     double getCoins() {
         if(broken){
-            double coinAux = this->value;
+            double coinauxiliar = this->value;
             this->value = 0;
-            return coinAux;
+            return coinauxiliar;
         }
         std::cout << "fail: you must break the pig first\n";
         return 0;
@@ -121,7 +121,7 @@ public:
     std::string getItens() {
         if(broken){
             std::stringstream ss;
-            ss << aux::fmt(this->itens);
+            ss << auxiliar::fmt(this->itens);
             itens.clear();
             return ss.str();
         }
@@ -130,8 +130,8 @@ public:
 
     std::string str() const {
         std::stringstream ss;
-        ss << aux::fmt(this->itens) << " : "
-           << aux::fmt(value) << "$ : "
+        ss << auxiliar::fmt(this->itens) << " : "
+           << auxiliar::fmt(value) << "$ : "
            << volume <<  "/" << volumeMax << " : " 
            <<  (broken ? "broken" : "unbroken");
         return ss.str();
@@ -143,12 +143,12 @@ std::ostream& operator<<(std::ostream& os, const Pig& pig) {
 }
 
 int main() {
-    aux::Chain chain;
-    aux::Param par;
+    auxiliar::Chain chain;
+    auxiliar::Param par;
 
     Pig pig;
     
-    auto toInt = aux::to<int>;
+    auto toInt = auxiliar::to<int>;
 
     chain["init"] = [&]() { pig = Pig(toInt(par[1])); };
     chain["addCoin"] = [&]() { 
@@ -159,9 +159,9 @@ int main() {
     };
     chain["addItem"] = [&]() { pig.addItem(Item(par[1], toInt(par[2]))); };
     chain["break"] = [&]() { pig.breakPig(); };
-    chain["getCoins"] = [&]() { aux::show << pig.getCoins(); };
-    chain["getItens"] = [&]() { aux::show << pig.getItens(); };
-    chain["show"] = [&]() {     aux::show << pig.str(); };
+    chain["getCoins"] = [&]() { auxiliar::show << pig.getCoins(); };
+    chain["getItens"] = [&]() { auxiliar::show << pig.getItens(); };
+    chain["show"] = [&]() {     auxiliar::show << pig.str(); };
 
-    aux::execute(chain, par);
+    auxiliar::execute(chain, par);
 }
