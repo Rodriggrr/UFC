@@ -1,14 +1,38 @@
 #include <iostream>
+#include "math.hpp"
+#include <math.h>
 
-bool check(int x)
+auto soma (auto x, auto y)
 {
-    if(x != 0)
-        return false && std::cout << "x != 0" << std::endl;
-    return true;
+    return x + y;
 }
+
+auto op (auto a, auto b, auto fn){
+    return fn(a, b);
+}
+
+auto op (auto a, auto b)
+{
+    return op(a, b, [](auto a, auto b) { return a + b; });
+}
+
+auto op (auto a)
+{
+    return a;
+}
+
+
 
 int main()
 {
-    int x = 1;
-    check(x);
+    auto x = new int;
+    *x = 2;
+    delete x;
+    std::cout << math::sqrt(3.14) << std::endl;
+    std::cout << std::sqrt(3.14) << std::endl;
+    std::cout << math::factor(3.14) << std::endl;
+    std::cout << soma(std::string("Hello "), std::string("World")) << std::endl;
+    std::cout << op(2, 3) << std::endl;
+    std::cout << op(2, 3, [](auto a, auto b) { return a - b; }) << std::endl;
+    std::cout << op(2);
 }
