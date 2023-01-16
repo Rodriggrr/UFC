@@ -1,5 +1,6 @@
 /* Equation solver for variância and desvio padrão.*/
 
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -12,7 +13,7 @@ namespace stc
     {
         double sum{};
         for(auto a : vet)
-            sum += a;
+            sum += std::abs(a);
         return sum;
     }
 
@@ -29,7 +30,7 @@ namespace stc
         for(auto a : vet)
             sum += pow((a - avg), 2);
 
-        return sum / (vet.size() - 1);
+        return sum / (vet.size());
     }
 
     auto desv_p(vector<double> vet)
@@ -50,8 +51,20 @@ void get_numbers(vector<T> &vet)
 
 int main()
 {
-    std::vector<double> vet;
-    get_numbers(vet);
-    std::cout << stc::avg({1, 2}) << endl;
-    cout << stc::desv_p(vet);
+    std::vector<double> v;
+    std::stringstream ss;
+    std::string s;
+
+    std::getline(cin, s);
+    ss << s;
+
+    while(ss.rdbuf()->in_avail() != 0)
+    {
+        double foo;
+        ss >> foo;
+        v.push_back(foo);
+    }
+
+    std::cout << stc::var(v);
+    main();
 }

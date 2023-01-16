@@ -1,5 +1,6 @@
 #include <iostream>
 #include <array>
+#include "rod.hpp"
 #include <list>
 
 class Pass
@@ -72,7 +73,7 @@ public:
         list[index] = Pass("", 0);
         return true;
     }
-}
+};
 
 int main()
 {

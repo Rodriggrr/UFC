@@ -1,5 +1,4 @@
 #include <iostream>
-#include "rod.hpp"
 #include <vector>
 #include <memory>
 
@@ -51,8 +50,8 @@ class Sala
 
 public:
     Sala(int capacidade){
-        cadeiras.resize(capacidade);
-        rod::fill(cadeiras, nullptr);
+        for(auto i= 0; i < capacidade; i++)
+            cadeiras.push_back(nullptr);
     }
 };
 
