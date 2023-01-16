@@ -1,10 +1,18 @@
 #include <iostream>
 
+
 bool check_letter(int a)
 {
     if((a > 96 && a < 96 + 26) or (a > 64 && a < 65 + 26))
         return true;
     return false;
+}
+
+bool check_word(std::string palavra){
+    for(int i = 0; i < palavra.length(); i++)
+        if(!check_letter(palavra[i]))
+            return false;
+    return true;
 }
 
 char move_letter(char c, const int &key){
@@ -27,6 +35,10 @@ int loop(std::string palavra, int key)
     while(key != 0){
         std::cout << "Escreva a palavra a ser Cifrada:\n";
         std::cin >> palavra;
+        if(!check_word(palavra)){
+            std::cout << "Palavra inválida, repita.\n";
+            continue;
+        }
         std::cout << "Escolha uma chave entre 1 e 25:\n";
         std::cin >> key;
         if(key == 0){
