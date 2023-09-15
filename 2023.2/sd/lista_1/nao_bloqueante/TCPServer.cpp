@@ -10,6 +10,7 @@ public:
     Connection() = default;
     Connection(Client client);
     void run();
+    void commands(std::string msg);
     void disconnect();
     Client getClient(){
         return client;
@@ -63,17 +64,24 @@ void Connection::run(){
         bytes = client.recv();
         if(bytes < 1) break;
         if(client.isConnected() == false) return;
+        if(client.getBufStr()[0] == '!'){ 
+            commands(client.getBufStr());
+            continue;
+        }
 
         auto broadcastMsg = client.getHost() + ": " + client.getBufStr();
         broadcast(horaAtual() + broadcastMsg, client.getSocketFd());
+
+
         
         printr(horaAtual() + client.getHost() + ": " + client.getBufStr());
     }
     disconnect();
 }
 
+
 void Connection::disconnect(){
-    std::cout << "Client disconnected: " << client.getIpAddress() << ":" << client.getPort() << std::endl;
+    std::cout << "Client disconnected: " << client.getIpAddress() << ":" << client.getPort() << " (" << client.getHost() << ")" << std::endl;
     
     auto it = std::find_if(connections.begin(), connections.end(), [&](auto c){
         return c->getClient() == client;
@@ -82,6 +90,60 @@ void Connection::disconnect(){
         client.setConnected(false);
         it->reset();
         connections.erase(it);
+    }
+}
+
+void Connection::commands(std::string msg){
+    auto args = fn::split(msg, ' ');
+
+    if(args[0] == "!list") {
+        std::string list = "Usuários conectados:\n";
+        for (int i = 0; i < connections.size(); i++){
+            list += std::to_string(i) + ": " + connections[i]->getClient().getIpAddress() + ":" + std::to_string(connections[i]->getClient().getPort()) + " (" + connections[i]->getClient().getHost() + ")\n";
+        }
+        client.send(list);
+    
+    } 
+    else if (args[0] == "!exit") disconnect();
+
+    else if (args[0] == "!whisper"){
+        auto index = fn::number(args[1]);
+        if(index > connections.size()-1) {
+            client.send("Usuário não encontrado");
+            return;
+        }
+
+        auto dest = std::make_shared<Client>(connections[index]->getClient());
+
+        printr(client.getHost() + " está sussurrando para " + dest->getHost() + ". shhhh...");
+
+        std::string pvMsg = "";
+        client.send("!whisper");
+        while(true) {
+            auto bytes = client.recv();
+            pvMsg = client.getBufStr();
+
+            if(bytes < 1 or pvMsg == "!exit") break;
+
+            dest->send(horaAtual() + client.getHost() + "(sussurro): " + pvMsg);
+        }
+        client.send("!exit");
+        printr(client.getHost() + " parou de sussurrar.");
+    }
+    else if(args[0] == "!host"){
+        args.erase(args.begin());
+        client.setHost(fn::join(args, " "));
+        client.send("!host " + client.getHost());
+    }
+    else if(args[0] == "!help"){
+        std::stringstream help; 
+        help << "Comandos disponíveis:\n"
+             << "!list               - lista os usuários conectados.\n"
+             << "!whisper <index>    - entra em modo de mensagem privada.\n"
+             << "!host <name>        - define um nome de usuário.\n"
+             << "!exit               - sai do programa ou do modo whisper.\n"
+             << "!help               - mostra essa mensagem.\n";
+        client.send(help.str());
     }
 }
 

@@ -5,6 +5,7 @@
 
 Socket client(LOCALHOST0, 7896);
 bool connected = false;
+bool whisper = false;
 std::string host = "";
 
 void inputHandler(){
@@ -16,18 +17,19 @@ void inputHandler(){
 
     while(true){
         while(host == "");
-            std::cout << host << ": ";
+            std::cout << host << (whisper ? "(sussurro): " : ": ");
+
         getline(std::cin, msg);
         if (msg.size() == 0) msg = " ";
 
-        if(host != "")    
-            printr("\033[F" + horaAtual() + host + ": " + msg);
-    
+        if(host != "" and msg[0] != '!'){    
+            printr("\033[F" + horaAtual() + host + ((whisper) ? "(sussurro): " : ": ") + msg + "          ");
+        }
         client.send(msg);
     }
 }
 
-void outputHandler(){
+void incomingHandler(){
     while(true){
         int bytes = client.recv();
         if(bytes < 1) break;
@@ -41,6 +43,17 @@ void outputHandler(){
             unlock();
             continue;
         }
+        if(args[0] == "!whisper") {
+            ::whisper = true;
+        }
+        else if(args[0] == "!exit") {
+            if(whisper) {
+                whisper = false;
+                continue;
+            }    
+            host = "";
+            break;
+        }
 
         printr(client.getBufStr());
     }
@@ -52,8 +65,8 @@ int main(){
     client.init(true);
 
     std::thread input(inputHandler);
-    std::thread output(outputHandler);
+    std::thread incoming(incomingHandler);
 
     input.detach();
-    output.join();
+    incoming.join();
 }
