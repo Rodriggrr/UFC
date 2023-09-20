@@ -25,6 +25,9 @@
 
 ////////////////////////////////////////////////////
 ///
+/// AUTHOR: Rodrigo Farinon; github.com/rodriggrr
+/// CONTACT: rfarinon@alu.ufc.br
+///
 /// A simple TCP socket library for C++.
 /// 
 /// TOC:
@@ -335,7 +338,7 @@ public:
         node->setSock(::accept(socket, (struct sockaddr *)node->getAddr(), node->getAddrLen()));
         node->setIp(inet_ntoa(node->getAddr()->sin_addr));
         node->setPort(ntohs(node->getAddr()->sin_port));
-        
+
         if(node->getSock() < 0) {
             throw std::runtime_error("Error accepting connection");
         }
