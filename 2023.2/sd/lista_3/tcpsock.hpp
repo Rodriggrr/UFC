@@ -215,7 +215,7 @@ public:
  * @param ip        The ip that the socket will be bind, or to connected to. If not set, fallback to 0.0.0.0
  * @param isClient  Tell the socket if it is a client or not. If not set, fallback to false. Check note below.
  * @param reuseAddr Tell the socket if it should reuse the address or not. If not set, fallback to true.
- * @param queued    Tell the socket how many connections it should queue until droping requisitions. If not set, fallback to 3.
+ * @param queued    Tell the socket how many connections it should queue until droping requisitions. If not set, fallback to 10.
  * 
  * @throw std::runtime_error() if the socket can't be created. Sometimes it can be fixed, so you should try to treat it. Ex: bad port.
  * 
