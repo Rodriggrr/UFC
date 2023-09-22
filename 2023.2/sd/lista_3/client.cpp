@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <mutex>
+#include "fn.hpp"
 
 
 std::mutex mu;
@@ -10,26 +11,34 @@ using namespace skt;
 
 std::vector<std::thread> threads;
 
-int errors = 0;
+float errors = 0;
+int trials = 30000;
 
 int main()
 {
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < trials; i++) {
 
-        std::thread t([](int i){
-            try {
-                Socket client(49101, true);
-                client.connect();
-                client.send("ping");
-                client.recv();
-            } catch(std::runtime_error& e) {
-                mu.lock();
-                    errors++;
-                mu.unlock();
-            }
-        }, i);
+        try {
+            std::thread t([](int i){
+                try {
+                    Socket client(49101, true);
+                    client.connect();
+                    client.send("ping");
+                    client.recv();
+                    client.close();
+                } catch(std::runtime_error& e) {
+                    mu.lock();
+                        errors++;
+                    mu.unlock();
+                }
 
-        threads.push_back(std::move(t));
+            }, i);
+            threads.push_back(std::move(t));
+        } catch(std::system_error& e){
+            std::cout << e.what() << ", waiting 5 sec" <<std::endl;
+            sleep(5);
+        }
+
     }
 
     for(auto& t : threads) {
@@ -38,5 +47,7 @@ int main()
 
     std::cout << "Done." << std::endl;
     std::cout << "Errors: " << errors << std::endl;
-    std::cout << "Success rate: " << 100 - errors << "%" << std::endl;
+    //error percentage
+    errors = 100 - (errors / ((float)trials / 100));
+    std::cout << "Success rate: " << fn::format("{%0.2f}%", errors) << std::endl;
 }

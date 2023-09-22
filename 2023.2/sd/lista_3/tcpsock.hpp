@@ -8,7 +8,7 @@
     #include <ws2tcpip.h>
     #include <windows.h>
     #include <iphlpapi.h>
-    #define SO_WINDOW
+    #define SO_WINDOWS
     typedef SOCKET sock_t;
 #else 
     #include <sys/socket.h>
@@ -48,6 +48,17 @@
 /// skt::Socket::getSocket() --> sock_t       - Method
 /// skt::Socket::getAddr() ----> sockaddr_in* - Method
 ///
+/// NODE METHODS:
+/// skt::Node::Node() ---------> Constructor
+/// skt::Node::send() ---------> void          - Method
+/// skt::Node::recv() ---------> std::string   - Method
+/// skt::Node::getSock() ------> sock_t        - Method
+/// skt::Node::getIp() --------> std::string   - Method
+/// skt::Node::getIpStr() -----> std::string   - Method
+/// skt::Node::getPort() ------> int           - Method
+/// skt::Node::getAddr() ------> sockaddr_in*  - Method
+/// skt::Node::getAddrLen() ---> socklen_t*    - Method
+///
 /// FUNCTIONS:
 /// skt::getLastError() -------> std::string  - Function
 ///
@@ -64,8 +75,6 @@
  * 
  * @note All classes and functions are inside this namespace.
  * 
- * 
- * 
  */
 namespace skt {
 
@@ -73,7 +82,7 @@ namespace skt {
 // Node class.
 /**
  * 
- * @brief Node class, used to store data about a node.
+ * @brief Node class, used to store data about a client. sock fd, ip,
  * 
  * @param sock_fd   The socket file descriptor of the node.
  * @param ip    The ip of the node.
@@ -81,10 +90,10 @@ namespace skt {
  * 
  * @note No parameters are required to create a node, but you can set them later.
  * The destructor will close the socket file descriptor, this behavior can be changed by passing true to the constructor.
- * @note Examples:
- * @note skt::Node node; - Creates a node with no parameters.
- * @note skt::Node node(true); - Creates a node with no parameters, but the destructor will not close the socket file descriptor.
- * @note skt::Node node(sock_fd, ip, port); - Creates a node with the given parameters.
+ * @warning Examples:
+ * @warning skt::Node node; - Creates a node with no parameters.
+ * @warning skt::Node node(true); - Creates a node with no parameters, but the destructor will not close the socket file descriptor.
+ * @warning skt::Node node(sock_fd, ip, port); - Creates a node with the given parameters.
  *
  */
 class Node {
@@ -229,7 +238,7 @@ class Socket {
     sock_t socket;
     std::string ip;
     sockaddr_in addr;
-    int addrLen = sizeof(addr);
+    socklen_t addrLen = sizeof(addr);
     bool reuseAddr;
     char buffer[4096];
     int port{}, queued{};
@@ -272,7 +281,7 @@ class Socket {
                 throw std::runtime_error("Error setting socket options");
         }
 
-        if(::bind(socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+        if(::bind(socket, (struct sockaddr *)&addr, addrLen) < 0) {
             throw std::runtime_error("Error binding socket to IP/Port");
         }
     }
