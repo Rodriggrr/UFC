@@ -5,7 +5,7 @@
 int clients = 0;
 
 int main(){
-    skt::Socket server(49100, LOCALHOST, false, true, 10);
+    skt::Socket server(49101, LOCALHOST, false, true, 10);
     while(true){
         auto node = server.accept();
         std::cout << "Client " << ++clients << " connected." << std::endl;

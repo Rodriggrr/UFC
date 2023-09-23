@@ -12,7 +12,7 @@ using namespace skt;
 std::vector<std::thread> threads;
 
 float errors = 0;
-int trials = 30000;
+int trials = 100;
 
 int main()
 {
