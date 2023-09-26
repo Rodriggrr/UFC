@@ -8,15 +8,16 @@ OPERACAO,NUMERO1,NUMERO2
 // Exemplo
 ADD,1,2
 
+OPERACOES:
+ADD - Adição
+SUB - Subtração
+MUL - Multiplicação
+DIV - Divisão
+
 ```
 
 ## Servidor - Cliente
 
 ```cpp
-CODIGO,RESULTADO
-
-CODIGOS:
-
-0 OK
-1 ERRO
+RESULTADO
 ```
