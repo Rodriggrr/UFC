@@ -7,7 +7,7 @@ SRC_FILES=$(wildcard *.cpp) $(wildcard *.cc)
 OUT_FILE=out
 
 $(OUT_FILE): $(SRC_FILES)
-	$(CXX) $(CXXFLAGS) $(SRC_FILES) -o $(OUT_FILE) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(SRC_FILES) -o $(OUT_FILE) $(LDFLAGS) && ./$(OUT_FILE)
 
 .PHONY: clean
 clean:
