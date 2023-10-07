@@ -3,7 +3,7 @@ typedef std::shared_ptr<Node> NodePtr;
 
 class Connection {
     std::thread thread;
-    Node* node;
+    NodePtr node;
 
     void run() {
         while(true) {
@@ -11,16 +11,17 @@ class Connection {
                 
                 auto msg = node->recv();
                 if(msg == "") break;
+                std::cout << "Thread " << thread.get_id() << ": " << msg << std::endl;
                 node->send(Despachante::invoke(msg));
 
             } catch (std::runtime_error& e) {
-                std::cout << "Thread" << thread.get_id() << " fechou devido a um erro: " << e.what() << std::endl;
+                std::cout << "Thread " << thread.get_id() << ": ERROR - " << e.what() << std::endl;
             }
         }
     }
     
 public:
-    Connection(Node* node) {
+    Connection(NodePtr node) {
         this->node = node;
         this->thread = std::thread(&Connection::run, this);
         thread.join();

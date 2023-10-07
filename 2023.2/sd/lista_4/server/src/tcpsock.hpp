@@ -21,6 +21,9 @@
 #endif
 
 #include <string>
+#include <sstream>
+#include <locale>
+#include <codecvt>
 #include <stdexcept>
 
 ////////////////////////////////////////////////////
@@ -183,7 +186,8 @@ public:
      * @throw `std::runtime_error()` if the data can't be sent.
      * 
      */
-    void send(std::string data) {
+    template<typename T>
+    void send(T data) {
         int sent = ::send(sock_fd, data.c_str(), data.size(), 0);
         if(sent < 0) {
             throw std::runtime_error("Error sending data");
@@ -436,7 +440,8 @@ public:
      * @throw `std::runtime_error()` if the data can't be sent.
      * 
      */
-    int send(std::string data, sock_t socket=INVALID_SOCKET) {
+    template<typename T>
+    int send(T data, sock_t socket=INVALID_SOCKET) {
         if(socket == INVALID_SOCKET) { socket = this->socket; }
 
         int sent = ::send(socket, data.c_str(), data.size(), 0);
@@ -500,6 +505,10 @@ public:
     sockaddr_in* getAddr() {
         return &addr;
     }
+
+    int getPort() {
+        return port;
+    }
 };
 
 // Returns the last error.
@@ -509,6 +518,31 @@ std::string getLastError() {
 #else
     return std::to_string(errno);
 #endif
+}
+
+
+// Converts a string to UTF-16.
+std::wstring toUTF(std::string wstr) { 
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter; 
+    return converter.from_bytes(wstr); 
+}
+
+// Returns a string with the stream of a string. Ex: "1 2 3" -> "123". Useful to remove spaces.
+///@note Use this function when receiving data from a bad formatted client.
+std::string stream(std::string str) {
+    std::stringstream ss;
+    ss << str;
+    std::string msg = "";
+    while(ss >> str) {
+        msg += str;
+    }
+    return msg;
+}
+
+// Converts a wstring to string.
+std::string fromUTF(std::wstring wstr) { 
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter; 
+    return converter.to_bytes(wstr); 
 }
 
 }

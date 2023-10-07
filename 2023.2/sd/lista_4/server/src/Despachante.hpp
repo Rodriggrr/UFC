@@ -7,21 +7,15 @@
 struct Despachante : Esqueleto {
 
     static std::string invoke(std::string args) {
-        auto params = getParams(args);
-        auto operation = params.first;
-        auto nums = params.second;
-        
+        auto operation = fn::split(args, ',')[0];
+        auto nums = fn::split(args, ',')[1];
+
         if      (operation == "ADD") { return Esqueleto::add(nums); }
         else if (operation == "SUB") { return Esqueleto::sub(nums); }
         else if (operation == "MUL") { return Esqueleto::mul(nums); }
         else if (operation == "DIV") { return Esqueleto::div(nums); }
-        return "FAIL";
+
+        std::cout << "Invalid Operation" << std::endl;
+        return "-1";
     }   
-
-private:
-
-    static std::pair<std::string, std::string> getParams(std::string args) {
-        auto params = fn::split(args, ',');
-        return std::make_pair(params[0], (params[1] + ',' + params[2])); 
-    }
 };

@@ -9,15 +9,16 @@ using namespace skt;
 #include "src/fn.hpp"
 #include "src/Connection.hpp"
 
-
 std::vector<Connection> connections;
 
 int main() {
-    Socket sock(49110);
+    Socket sock(49100);
+    std::cerr << "Servidor Rodando na porta " << sock.getPort() << std::endl;
 
     while(true) {
         auto node = sock.accept();
-        connections.push_back(Connection(node));
+        std::shared_ptr<Node> ptr(node);
+        connections.push_back(Connection(ptr));
     }
 }
 
